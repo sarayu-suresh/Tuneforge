@@ -6,6 +6,32 @@ import os
 import json
 import pandas as pd
 
+from transformers import TrainerCallback
+
+class ProgressCallback(TrainerCallback):
+    def on_train_begin(self, args, state, control, **kwargs):
+        training_status["status"] = "running"
+        training_status["total_steps"] = state.max_steps
+        training_status["message"] = "Training started"
+
+    def on_step_end(self, args, state, control, **kwargs):
+        training_status["current_step"] = state.global_step
+        training_status["epoch"] = state.epoch
+        training_status["message"] = f"Step {state.global_step}/{state.max_steps}"
+
+    def on_train_end(self, args, state, control, **kwargs):
+        training_status["status"] = "done"
+        training_status["message"] = "Training complete"
+
+training_status = {
+    "status": "idle",         # idle | running | done
+    "current_step": 0,
+    "total_steps": 0,
+    "epoch": 0,
+    "message": ""
+}
+
+
 def load_custom_dataset(path):
     if path.endswith('.csv'):
         df = pd.read_csv(path)
@@ -43,11 +69,12 @@ def fine_tune_model(dataset_path, base_model_name, output_dir):
         save_total_limit=1,
         report_to="none"
     )
-
+    
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=tokenized
+        train_dataset=tokenized,
+        callbacks=[ProgressCallback()]
     )
 
     trainer.train()

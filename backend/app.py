@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 import os
 from train import fine_tune_model
+from train import training_status
 from inference import generate_response
 from flask_cors import CORS
 
@@ -34,6 +35,12 @@ def chat():
     prompt = data['prompt']
     response = generate_response(prompt, model_path)
     return jsonify({'response': response})
+
+
+@app.route('/train/status', methods=['GET'])
+def get_status():
+    return jsonify(training_status)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
