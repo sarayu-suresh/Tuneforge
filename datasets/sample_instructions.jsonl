@@ -1,0 +1,5 @@
+{"instruction": "Translate to French: Hello", "response": "Bonjour"}
+{"instruction": "What is a transformer model?", "response": "A transformer is a neural network architecture used in natural language processing that relies on self-attention to process input sequences in parallel."}
+{"instruction": "Summarize: Language models can generate text.", "response": "Language models are capable of generating coherent text."}
+{"instruction": "Convert to past tense: She walks to school.", "response": "She walked to school."}
+{"instruction": "List 3 benefits of Python.", "response": "1. Easy to read and write\n2. Large community support\n3. Extensive libraries for various tasks"}
